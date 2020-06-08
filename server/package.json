@@ -1,0 +1,43 @@
+{
+  "name": "schedule-bot-server",
+  "version": "0.1.0",
+  "private": true,
+  "author": "maxzinchenko",
+  "license": "MIT",
+  "main": "src/index.js",
+  "scripts": {
+    "db:create": "sequelize db:create",
+    "db:migrate": "sequelize db:migrate",
+    "db:drop": "sequelize db:drop",
+    "db:init": "npm run db:create && npm run db:migrate",
+    "start:server": "nodemon main",
+    "eslint:check": "eslint .",
+    "eslint:fix": "eslint . --fix",
+    "precommit": "npm run eslint"
+  },
+  "dependencies": {
+    "body-parser": "1.19.0",
+    "dotenv": "8.2.0",
+    "express": "4.17.1",
+    "pg": "7.17.1",
+    "pg-hstore": "2.3.3",
+    "sequelize": "5.21.6",
+    "uuid": "3.3.3"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.8.4",
+    "@babel/core": "7.7.5",
+    "@babel/polyfill": "7.8.7",
+    "babel-eslint": "10.0.3",
+    "eslint": "6.8.0",
+    "eslint-config-airbnb-base": "14.0.0",
+    "eslint-plugin-array-func": "3.1.4",
+    "eslint-plugin-import": "2.20.0",
+    "eslint-plugin-jest": "23.8.2",
+    "eslint-plugin-unicorn": "18.0.1",
+    "husky": "0.14.3",
+    "jest": "25.1.0",
+    "nodemon": "2.0.2",
+    "sequelize-cli": "5.5.1"
+  }
+}

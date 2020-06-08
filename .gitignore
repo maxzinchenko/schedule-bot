@@ -1,0 +1,12 @@
+# Secrets
+server/.env
+
+# Dependencies
+server/node_modules
+
+# Production build
+server/dist
+
+# IDEA
+.idea
+server/.idea
