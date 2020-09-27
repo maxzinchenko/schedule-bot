@@ -195,7 +195,7 @@ module.exports = {
     'unicorn/new-for-builtins': ERROR,
     'unicorn/no-abusive-eslint-disable': ERROR,
     'unicorn/regex-shorthand': ERROR,
-    'unicorn/prevent-abbreviations': ERROR,
+    'unicorn/prevent-abbreviations': OFF,
     'unicorn/prefer-text-content': OFF,
     'unicorn/prefer-node-remove': OFF,
 

@@ -8,7 +8,18 @@ module.exports = {
         allowNull: false
       },
 
+      role: {
+        type: Sequelize.ENUM('admin', 'moderator', 'user', 'outcast'),
+        defaultValue: 'user',
+        allowNull: false
+      },
+
       group: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+
+      lecturer: {
         type: Sequelize.STRING,
         allowNull: true
       }
