@@ -1,17 +1,7 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  Index,
-  BaseEntity,
-  CreateDateColumn,
-  UpdateDateColumn,
-  DeleteDateColumn
-} from 'typeorm';
-import { IsString, IsNotEmpty, Max } from 'class-validator';
+import { Entity, PrimaryGeneratedColumn, Column, Index, BaseEntity, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
+import { IsString, IsNotEmpty } from 'class-validator';
 
 import { EUserRole } from '../typedef';
-import { DB_NAME } from '../constants';
 
 @Entity()
 export class User extends BaseEntity {
