@@ -1,4 +1,4 @@
-import { Application, RequestHandler, Router } from 'express';
+import { Application, RequestHandler } from 'express';
 import { createConnection, Connection, Entity } from 'typeorm';
 import { useExpressServer } from 'routing-controllers';
 import http from 'http';
@@ -6,7 +6,7 @@ import http from 'http';
 import { DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USER, ENV } from './constants';
 
 export class Server {
-  constructor(private app: Application, private readonly port?: number) {
+  constructor(private readonly app: Application, private readonly port?: number) {
     this.app = app;
     this.port = port;
   }
@@ -23,10 +23,10 @@ export class Server {
     });
   };
 
-  public loadControllers(): void {
+  public loadControllers(folderName: string): void {
     useExpressServer(this.app, {
       routePrefix: '/api/v1',
-      controllers: [`${__dirname}/controllers/*.ts`]
+      controllers: [`${__dirname}/${folderName}/*.ts`]
     });
   };
 

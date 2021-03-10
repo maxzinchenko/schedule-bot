@@ -1,23 +1,18 @@
 {
   "compilerOptions":{
-     "module":"commonjs",
-     "esModuleInterop": true,
-     "moduleResolution": "node",
-     "pretty": true,
-     "sourceMap": true,
-     "outDir": "./dist",
-     "baseUrl": "./src",
-     "emitDecoratorMetadata": true,
-     "experimentalDecorators": true,
-     "target": "es2020",
-     "typeRoots":[
-        "node_modules/@types"
-     ]
+    "module":"commonjs",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "pretty": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./src",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "es2020",
+    "typeRoots": ["node_modules/@types"]
   },
-  "include":[
-     "src/**/*.ts"
-  ],
-  "exclude":[
-     "node_modules"
-  ]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
 }

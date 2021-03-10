@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import express, { RequestHandler, Router } from 'express';
+import express, { RequestHandler } from 'express';
 import { urlencoded, json } from 'body-parser'
 
 import { SERVER_PORT } from './src/constants'
@@ -20,7 +20,7 @@ const globalMiddleware: Array<RequestHandler> = [
 server.initDatabase([User as ReturnType<any>])
   .then(() => {
     server.loadMiddleware(globalMiddleware);
-    server.loadControllers();
+    server.loadControllers('controllers');
     server.run();
   })
   .catch(console.error);

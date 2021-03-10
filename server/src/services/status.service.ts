@@ -1,5 +1,5 @@
 import { ENV } from '../constants';
-import { IStatusDTO } from '../typedef/status.typedef';
+import { IStatusDTO } from '../typedef';
 
 export class StatusService {
   public getStatus(): IStatusDTO {

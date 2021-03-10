@@ -1,11 +1,11 @@
 import { Response } from 'express';
 
 export abstract class BaseController {
-  public ok<T>(res: Response, dto: T): Response {
+  public ok<T>(res: Response, dto: T): Response<T> {
     return res.status(200).json(dto);
   }
 
-  public created<T>(res: Response, dto: T): Response {
+  public created<T>(res: Response, dto: T): Response<T> {
     return res.status(201).json(dto);
   }
 
