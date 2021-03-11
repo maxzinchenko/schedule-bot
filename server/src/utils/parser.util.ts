@@ -20,14 +20,21 @@ const getData = (string: string, index: number) => {
 };
 
 export const parseSchedule = (data: string) => {
-  const html = iconv.decode(Buffer.from(data, 'binary'), 'win1251');
-  const $ = cheerio.load(html);
-  const schedule = [];
+  const $ = cheerio.load(data);
+  const schedule = {};
 
   const header = $('div.jumbotron div.container h4').text();
 
-  $('table.table-striped tr td:nth-child(3)').each((i, elem) => {
-    schedule.push(getData($(elem).text().trim(), i))
+  $('table.table-striped').each((_, table) => {
+    const date = $(table.parentNode).children('h4').text().replace(/\s.*/, '');
+
+    schedule[date] = [];
+
+    $(table.firstChild).children('tbody tr').each((idx, tr) => {
+      const innerText = $(tr.lastChild).text().trim();
+
+      schedule[date].push(getData(innerText, idx));
+    });
   });
 
   return { header, schedule };

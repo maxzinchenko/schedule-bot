@@ -8,5 +8,5 @@ export const DB_HOST = process.env.DB_HOST!;
 export const DB_USER = process.env.DB_USER!;
 export const DB_PASSWORD = process.env.DB_PASSWORD!;
 
-export const API_S_URL = process.env.API_S_URL;
-export const API_S_USER_AGENT = process.env.API_S_USER_AGENT;
+export const API_URL = process.env.API_URL;
+export const API_USER_AGENT = process.env.API_USER_AGENT;

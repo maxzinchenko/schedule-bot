@@ -1,9 +1,9 @@
 import { Application, RequestHandler } from 'express';
-import { createConnection, Connection, Entity } from 'typeorm';
+import { Connection, EntitySchema } from 'typeorm';
 import { useExpressServer } from 'routing-controllers';
 import http from 'http';
 
-import { DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USER, ENV } from './constants';
+import { createDBConnection } from './database';
 
 export class Server {
   constructor(private readonly app: Application, private readonly port?: number) {
@@ -13,7 +13,7 @@ export class Server {
 
   public run(): http.Server {
     return this.app.listen(this.port, () => {
-      console.log(`Api is up and running on port ${this.port}`)
+      console.log(`\nApi is up and running on port ${ this.port }\n`)
     });
   }
 
@@ -30,17 +30,7 @@ export class Server {
     });
   };
 
-  public initDatabase(entities: typeof Entity[]): Promise<Connection> {
-    return createConnection({
-      type: 'postgres',
-      host: DB_HOST,
-      port:  DB_PORT,
-      username: DB_USER,
-      password: DB_PASSWORD,
-      database: `${DB_NAME}_${ENV}`,
-      entities,
-      synchronize: true,
-      logging: true
-    });
+  public initDatabase(entities: Function[] | EntitySchema<any>[]): Promise<Connection> {
+    return createDBConnection(entities)
   }
 }

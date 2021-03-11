@@ -6,7 +6,7 @@ import { SERVER_PORT } from './src/constants'
 
 import { Server } from './src/server';
 
-import { User } from './src/models';
+import { User, Group } from './src/models';
 
 const app = express();
 
@@ -17,7 +17,7 @@ const globalMiddleware: Array<RequestHandler> = [
   json()
 ];
 
-server.initDatabase([User as ReturnType<any>])
+server.initDatabase([User, Group])
   .then(() => {
     server.loadMiddleware(globalMiddleware);
     server.loadControllers('controllers');
