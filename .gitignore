@@ -1,28 +1,23 @@
-# Secrets
-server/.env
-
 # Dependencies
-server/node_modules
+node_modules
 
-# Production build
-server/dist
+# Production Builds
+dist
+
+# Secrets
+.env
+
+# Testing
+coverage
+
+# Logging
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # IDEs
 .idea
 .vscode
-server/.idea
-server/.vscode
-
 
 # Misc
 .DS_Store
-*.jks
-*.p8
-*.p12
-*.key
-*.mobileprovision
-*.orig.*
-
-# Debug
-npm-debug.*
-yarn-error.log
