@@ -1,14 +1,7 @@
-import axios from 'axios';
-import iconv from 'iconv-lite';
-
 import { API_URL, API_USER_AGENT, REQUEST_DATA, REQUEST_N } from '../constants';
-import { RequestType } from '../typedef';
+import { axios } from '../config/axios.config';
 
-axios.interceptors.response.use(res => {
-  res.data = iconv.decode(Buffer.from(res.data, 'binary'), 'win1251');
-
-  return res;
-})
+export type RequestType = 'schedule' | 'teachers' | 'groups';
 
 const toQuery = data => new URLSearchParams(data).toString();
 

@@ -1,7 +1,9 @@
 import 'dotenv/config';
-import { Group, User } from '../models';
-import { createDBConnection } from '../database';
-import { GroupService } from '../services';
+import { database } from '../config/database.config';
+import { GroupService } from '../modules/group/group.service';
+
+import { User } from '../modules/user/user.entity';
+import { Group } from '../modules/group/group.entity';
 
 const addGroupsToDB = async () => {
   const groupService = new GroupService();
@@ -20,12 +22,15 @@ const addGroupsToDB = async () => {
       console.log('\n', name, '\nCREATED\n');
     } catch (error) {
       console.log('\n', name, '\nERROR\n', error, '\n');
+      process.exitCode = 1;
     }
   }
 
   console.log('\nDONE\n');
+
+  process.exit();
 };
 
-createDBConnection([User, Group]).then(() => {
+database.createConnection([User, Group]).then(() => {
   addGroupsToDB().catch(console.error)
 });

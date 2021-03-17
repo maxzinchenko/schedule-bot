@@ -1,8 +1,8 @@
 import { getRepository } from 'typeorm';
 
-import { REQUEST_TYPE } from '../constants';
-import { Group } from '../models';
-import { request } from '../utils';
+import { REQUEST_TYPE } from '../../constants';
+import { request } from '../../utils';
+import { Group } from './group.entity';
 
 export class GroupService {
   private groupRepository = getRepository(Group);
@@ -17,9 +17,14 @@ export class GroupService {
     return this.groupRepository.find();
   }
 
-  public async create(name: string) {
+  public getOneByName(name: string): Promise<Group> {
+    return this.groupRepository.findOne({ name });
+  }
+
+  public async create(name: string): Promise<Group> {
     const group = new Group();
-    group.name = name;
+    group.name = name.toLowerCase();
+    group.realName = name;
 
     await group.save();
 

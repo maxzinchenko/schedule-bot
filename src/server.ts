@@ -3,7 +3,7 @@ import { Connection, EntitySchema } from 'typeorm';
 import { useExpressServer } from 'routing-controllers';
 import http from 'http';
 
-import { createDBConnection } from './database';
+import { database } from './config/database.config';
 
 export class Server {
   constructor(private readonly app: Application, private readonly port?: number) {
@@ -23,14 +23,14 @@ export class Server {
     });
   };
 
-  public loadControllers(folderName: string): void {
+  public loadControllers(): void {
     useExpressServer(this.app, {
       routePrefix: '/api/v1',
-      controllers: [`${__dirname}/${folderName}/*.ts`]
+      controllers: [`${__dirname}/**/*.controller.ts`]
     });
   };
 
   public initDatabase(entities: Function[] | EntitySchema<any>[]): Promise<Connection> {
-    return createDBConnection(entities)
+    return database.createConnection(entities)
   }
 }

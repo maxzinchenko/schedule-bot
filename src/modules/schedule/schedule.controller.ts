@@ -1,8 +1,8 @@
 import { JsonController, Get, QueryParams, Res } from 'routing-controllers';
 import { Response } from 'express';
 
-import { BaseController } from './index';
-import { ScheduleService } from '../services';
+import { BaseController } from '../base.controller';
+import { ScheduleService } from './schedule.service';
 
 @JsonController('/schedule')
 export class StatusController extends BaseController {
@@ -15,7 +15,7 @@ export class StatusController extends BaseController {
 
       return super.ok(res, schedule);
     } catch (error) {
-      return super.fail(res, error);
+      return super.error(res, error);
     }
   }
 }

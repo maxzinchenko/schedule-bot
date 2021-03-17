@@ -1,28 +1,41 @@
+import { Group } from '../modules/group/group.entity';
+
 export enum EUserRole {
-  Admin = 'A',
-  Moderator = 'M',
-  Default = 'D',
-  Banned = 'B'
+  ADMIN = 'A',
+  MODERATOR = 'M',
+  DEFAULT = 'D',
+  BANNED = 'B'
+}
+
+export enum EUserType {
+  PRIVATE = 'private',
+  GROUP = 'group',
+  SUPERGROUP = 'supergroup'
 }
 
 export interface ICreateUserDTO {
-  chatId: string;
+  chatId: number;
+  type: EUserType;
   group?: string;
-  teacher?: string;
+  firstName?: string;
+  username?: string;
 }
 
 export interface IUpdateUserDTO {
   group?: string;
-  teacher?: string;
+  username?: string;
+  firstName?: string;
 }
 
 export interface IUserDTO {
-  id: string;
-  chatId: string;
+  id: number;
+  chatId: number;
   role: EUserRole;
+  type: EUserType;
+  firstName?: string;
+  username?: string;
+  group?: Group;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
-  group?: string;
-  teacher?: string;
 }

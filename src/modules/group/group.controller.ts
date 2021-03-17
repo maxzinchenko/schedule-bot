@@ -1,21 +1,21 @@
 import { JsonController, Get, QueryParams, Res, Req } from 'routing-controllers';
 import { Request, Response } from 'express';
 
-import { BaseController } from './index';
-import { GroupService } from '../services';
+import { BaseController } from '../base.controller';
+import { GroupService } from './group.service';
 
 @JsonController('/groups')
 export class StatusController extends BaseController {
   private readonly groupService = new GroupService();
 
-  @Get('')
+  @Get()
   public async get(@Req() _: Request, @Res() res: Response) {
     try {
       const groups = await this.groupService.getAll();
 
       return super.ok(res, groups);
     } catch (error) {
-      return super.fail(res, error);
+      return super.error(res, error);
     }
   }
 
@@ -26,7 +26,7 @@ export class StatusController extends BaseController {
 
       return super.ok(res, groups);
     } catch (error) {
-      return super.fail(res, error);
+      return super.error(res, error);
     }
   }
 }
