@@ -3,7 +3,7 @@ import { axios } from '../config/axios.config';
 
 export type RequestType = 'schedule' | 'teachers' | 'groups';
 
-const toQuery = data => new URLSearchParams(data).toString();
+const toQuery = data => Object.keys(data).map(key => [key, data[key]].map(item => item).join('=')).join('&');
 
 export const request = async (type: RequestType, data: any): Promise<any> => {
   const queryString = toQuery({ ...REQUEST_DATA[type], ...data });

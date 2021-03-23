@@ -5,7 +5,6 @@ import { urlencoded, json } from 'body-parser'
 
 import { SERVER_PORT } from './src/constants'
 import { Server } from './src/server';
-import { request } from './src/middlewares/request.middleware';
 
 import { User } from './src/modules/user/user.entity';
 import { Group } from './src/modules/group/group.entity';
@@ -15,8 +14,7 @@ const server = new Server(app, SERVER_PORT);
 
 const globalMiddleware: Array<RequestHandler> = [
   urlencoded({ extended: false }),
-  json(),
-  request()
+  json()
 ];
 
 server.initDatabase([User, Group])

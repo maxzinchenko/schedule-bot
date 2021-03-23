@@ -30,7 +30,7 @@ export class UserService {
     instance.type = dto.type;
 
     const errors = await validate(instance);
-    if (errors.length) throw new BadRequestError('group');
+    if (errors.length) throw new BadRequestError(errors[0].property);
 
     await instance.save();
 
@@ -40,18 +40,16 @@ export class UserService {
   public async update(chatId: number, dto: IUpdateUserDTO): Promise<User> {
     if (!dto.group) throw new BadRequestError('group');
 
-    const group = await this.groupService.getOneByName(dto.group);
-    if (!group) throw new NotFoundError('group');
-
-    const user = await this.getByChatId(chatId);
+    const [group, user] = await Promise.all([this.groupService.getOneByName(dto.group), this.getByChatId(chatId)]);
     if (!user) throw new NotFoundError('user');
+    if (!group) throw new NotFoundError('group');
 
     user.group = group;
     user.firstName = dto.firstName || user.firstName;
     user.username = dto.username || user.username;
 
     const errors = await validate(user);
-    if (errors.length) throw new BadRequestError('group');
+    if (errors.length) throw new BadRequestError(errors[0].property);
 
     await user.save();
 

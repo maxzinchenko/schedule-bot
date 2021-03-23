@@ -1,8 +1,8 @@
 import { Body, Delete, Get, JsonController, Param, Post, Put, Res } from 'routing-controllers';
 import { Response } from 'express';
 
-import { ICreateUserDTO, IUpdateUserDTO } from '../../typedef';
 import { BaseController } from '../base.controller';
+import { ICreateUserDTO, IUpdateUserDTO } from './user.dto';
 import { UserService } from './user.service';
 
 @JsonController('/users')

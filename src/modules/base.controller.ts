@@ -13,8 +13,12 @@ export abstract class BaseController {
   }
 
   public fail(res: Response, error: any): Response {
-    console.log(error);
-    logger('INTERNAL ERROR\n', `error: ${ JSON.stringify(error, null, 2) }`);
+    logger('', `${ res.req.method } ${ res.req.path }
+"params": ${ JSON.stringify(res.req.params, null, 4) }
+"query": ${ JSON.stringify(res.req.query, null, 4) }
+"body": ${ JSON.stringify(res.req.body, null, 4) }
+"error": ${ JSON.stringify(error, null, 4) }
+    `);
 
     return res.status(500).json({ message: error.message });
   }
