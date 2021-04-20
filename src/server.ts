@@ -3,6 +3,7 @@ import { Connection, EntitySchema } from 'typeorm';
 import { useExpressServer } from 'routing-controllers';
 import http from 'http';
 
+import { PRODUCTION } from './constants';
 import { database } from './config/database.config';
 
 export class Server {
@@ -18,7 +19,7 @@ export class Server {
   }
 
   public loadMiddleware(middleware: Array<RequestHandler>): void {
-    return middleware.forEach(mw => {
+    middleware.forEach(mw => {
       this.app.use(mw);
     });
   };
@@ -26,7 +27,7 @@ export class Server {
   public loadControllers(): void {
     useExpressServer(this.app, {
       routePrefix: '/api/v1',
-      controllers: [`${__dirname}/**/*.controller.ts`]
+      controllers: [`${__dirname}/**/*.controller.${ PRODUCTION ? 'js' : 'ts' }`]
     });
   };
 

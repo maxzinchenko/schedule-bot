@@ -1,0 +1,35 @@
+# PRODUCTION
+version: '3'
+
+services:
+  server:
+    build:
+      context: "./"
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - /home/app/server/node_modules
+#      - /home/bot/server:/home/app/server
+    env_file:
+      - .env
+    command: bash -c 'while !</dev/tcp/database/5555; do sleep 1; done; yarn start:prod;'
+  database:
+    image: postgres:latest
+    restart: always
+    ports:
+      - 5555:5432
+    volumes:
+#      - /home/bot/postgresql/data:/var/lib/postgresql/data:rw
+      - ./init-database.sh:/docker-entrypoint-initdb.d/init-database.sh
+    env_file:
+      - .env
+    command: -p 5555
+  memcached:
+    image: memcached:latest
+    restart: always
+    ports:
+      - 12121:11211
+#    volumes:
+#      - /home/bot/memcached:/memcached
+    command: -p 12121

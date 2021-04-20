@@ -1,7 +1,7 @@
 import 'dotenv/config';
+
 import { database } from '../config/database.config';
 import { GroupService } from '../modules/group/group.service';
-
 import { User } from '../modules/user/user.entity';
 import { Group } from '../modules/group/group.entity';
 
