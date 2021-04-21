@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+  api:
+    build:
+      target: base
+    command: bash -c 'while !</dev/tcp/database/5555; do sleep 1; done; yarn start:dev;'
+  database:
+    volumes:
+      - ./init-database.dev.sh:/docker-entrypoint-initdb.d/init-database.sh

@@ -1,0 +1,52 @@
+version: '3.7'
+
+services:
+  api:
+    container_name: api
+    restart: unless-stopped
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    depends_on:
+      - database
+      - cache
+    ports:
+      - 3000:3000
+    env_file:
+      - ../.env
+    volumes:
+      - .:/home/bot
+      - node_modules:/home/node/app/node_modules
+    networks:
+      - botnet
+  database:
+    container_name: database
+    image: postgres:latest
+    restart: unless-stopped
+    ports:
+      - $POSTGRES_PORT:5432
+    env_file:
+      - ../.env
+    volumes:
+      - ../volumes/database:/var/lib/postgresql/data:rw
+    networks:
+      - botnet
+    command: -p $POSTGRES_PORT
+  cache:
+    container_name: cache
+    image: memcached:latest
+    restart: unless-stopped
+    ports:
+      - $MEMCACHED_PORT:11211
+    volumes:
+      - ../volumes/cache:/memcached
+    networks:
+      - botnet
+    command: -p $MEMCACHED_PORT
+
+networks:
+  botnet:
+    driver: bridge
+
+volumes:
+  node_modules:
