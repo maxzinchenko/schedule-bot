@@ -7,7 +7,7 @@ import { Group } from './group.entity';
 export class GroupService {
   private groupRepository = getRepository(Group);
 
-  public async getGroupsNamesFromAPI(): Promise<string[]> {
+  public async getAllGroupsNames(): Promise<string[]> {
     const data = await request(REQUEST_TYPE.groups, null);
 
     return data.suggestions;

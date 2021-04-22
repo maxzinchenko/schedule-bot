@@ -5,7 +5,13 @@ export type RequestType = 'schedule' | 'teachers' | 'groups';
 
 const toQuery = data => Object.keys(data).map(key => [key, data[key]].map(item => item).join('=')).join('&');
 
-export const request = async (type: RequestType, data: any): Promise<any> => {
+type Data = {
+  group: string;
+  sdate?: string;
+  edate?: string;
+}
+
+export const request = async (type: RequestType, data?: Data): Promise<any> => {
   const queryString = toQuery({ ...REQUEST_DATA[type], ...data });
 
   const res = await axios(`${ API_URL }?n=${ REQUEST_N[type] }${ !data ? `&${ queryString }` : '' }`, {

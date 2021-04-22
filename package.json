@@ -15,7 +15,15 @@
     "start:prod": "cross-env NODE_ENV=production node dist/index.js",
     "group:script:dev": "cross-env NODE_ENV=development ts-node src/scripts/group.script.ts",
     "group:script:prod": "cross-env NODE_ENV=production node dist/src/scripts/group.script.js",
-    "build": "rm -rf dist && cross-env NODE_ENV=production tsc"
+    "build": "rm -rf dist && cross-env NODE_ENV=production tsc",
+    "docker:build:dev": "docker-compose -f docker/docker-compose.yml -f docker/docker-compose.dev.yml build",
+    "docker:build:prod": "docker-compose -f docker/docker-compose.yml -f docker/docker-compose.prod.yml build",
+    "docker:dev": "docker-compose -f docker/docker-compose.yml -f docker/docker-compose.dev.yml up -d",
+    "docker:prod": "docker-compose -f docker/docker-compose.yml -f docker/docker-compose.prod.yml up -d",
+    "docker:group:script:dev": "docker exec -it api yarn group:script:dev",
+    "docker:group:script:prod": "docker exec -it api yarn group:script:prod",
+    "docker:logs": "docker-compose -f docker/docker-compose.yml logs -f",
+    "docker:down": "docker-compose -f docker/docker-compose.yml down"
   },
   "dependencies": {
     "axios": "0.21.1",

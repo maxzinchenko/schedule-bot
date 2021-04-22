@@ -1,12 +1,15 @@
 FROM node:14 as base
 
-WORKDIR /home/bot
+ENV ROOT /api
+
+RUN mkdir $ROOT
+WORKDIR $ROOT
 
 COPY ./package.json ./
 
 RUN yarn
 
-COPY . .
+COPY . $ROOT
 
 FROM base as production
 

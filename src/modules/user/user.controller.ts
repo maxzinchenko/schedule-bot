@@ -12,7 +12,7 @@ export class UserController extends BaseController {
   @Get('/:chatId')
   public async get(@Param('chatId') chatId: string, @Res() res) {
     try {
-      const user = await this.userService.getOne(Number(chatId));
+      const user = await this.userService.get(chatId);
 
       return super.ok(res, user);
     } catch (error) {
@@ -34,7 +34,7 @@ export class UserController extends BaseController {
   @Put('/:chatId')
   public async update(@Param('chatId') chatId: string, @Body() body: IUpdateUserDTO, @Res() res: Response) {
     try {
-      const user = await this.userService.update(Number(chatId), body);
+      const user = await this.userService.update(chatId, body);
 
       return super.ok(res, user);
     } catch (error) {
@@ -45,7 +45,7 @@ export class UserController extends BaseController {
   @Delete('/:chatId')
   public async remove(@Param('chatId') chatId: string, @Res() res: Response) {
     try {
-      const user = await this.userService.remove(Number(chatId));
+      const user = await this.userService.remove(chatId);
 
       return super.ok(res, user);
     } catch (error) {

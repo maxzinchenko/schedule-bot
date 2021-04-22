@@ -2,11 +2,10 @@ version: '3.7'
 
 services:
   api:
-    container_name: api
     restart: unless-stopped
     build:
       context: ..
-      dockerfile: docker/Dockerfile
+      dockerfile: Dockerfile
     depends_on:
       - database
       - cache
@@ -15,12 +14,11 @@ services:
     env_file:
       - ../.env
     volumes:
-      - .:/home/bot
+      - ../:/api
       - node_modules:/home/node/app/node_modules
     networks:
       - botnet
   database:
-    container_name: database
     image: postgres:latest
     restart: unless-stopped
     ports:
@@ -33,7 +31,6 @@ services:
       - botnet
     command: -p $POSTGRES_PORT
   cache:
-    container_name: cache
     image: memcached:latest
     restart: unless-stopped
     ports:

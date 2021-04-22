@@ -7,9 +7,6 @@ dist
 # Docker volumes
 volumes
 
-# Secrets
-.env
-
 # Testing
 coverage
 

@@ -1,9 +1,9 @@
 import { memcached } from '../config/memcached.config';
 import { logger } from './logger.util';
 
-const LIFETIME = 86400; // 60 * 60 * 24
+const LIFETIME = 14400; // 60 * 60 * 4
 
-export const setCache = (key: string, value: any, cb: () => void) => {
+export const setCache = (key: string, value: any, cb: (data?: any) => void) => {
   memcached.set(key, JSON.stringify(value), LIFETIME, error => {
     if (error) {
       logger('Memcached', JSON.stringify(error, null, 4));

@@ -22,7 +22,7 @@ export class StatusController extends BaseController {
   @Get('/names')
   public async getNames(@QueryParams({ required: true }) query: any, @Res() res: Response) {
     try {
-      const groups = await this.groupService.getGroupsNamesFromAPI();
+      const groups = await this.groupService.getAllGroupsNames();
 
       return super.ok(res, groups);
     } catch (error) {

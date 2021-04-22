@@ -1,8 +1,8 @@
 export enum EUserRole {
-  ADMIN = 'A',
-  MODERATOR = 'M',
-  DEFAULT = 'D',
-  BANNED = 'B'
+  ADMIN,
+  MODERATOR,
+  DEFAULT,
+  BANNED
 }
 
 export enum EUserType {

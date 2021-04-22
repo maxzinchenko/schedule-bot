@@ -9,7 +9,7 @@ const addGroupsToDB = async () => {
   const groupService = new GroupService();
 
   // Getting all existing group names at the current moment
-  const groupNames = await groupService.getGroupsNamesFromAPI();
+  const groupNames = await groupService.getAllGroupsNames();
   // Removing all group entities
   await groupService.removeAll();
 

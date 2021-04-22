@@ -12,7 +12,7 @@ export class StatusController extends BaseController {
   @Get()
   public async get(@QueryParams({ required: true }) query: IGetScheduleDTO, @Res() res: Response) {
     try {
-      const schedule = await this.scheduleService.getSchedule(query);
+      const schedule = await this.scheduleService.get(query);
 
       return super.ok(res, schedule);
     } catch (error) {
