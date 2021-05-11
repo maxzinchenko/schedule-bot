@@ -1,7 +1,8 @@
 {
-  "compilerOptions":{
-    "module":"commonjs",
+  "compilerOptions": {
     "esModuleInterop": true,
+    "typeRoots": ["node_modules/@types"],
+    "module":"commonjs",
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
     "sourceMap": false,
@@ -9,9 +10,8 @@
     "baseUrl": "./src",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es2020",
-    "typeRoots": ["node_modules/@types"]
+    "target": "es2020"
   },
-  "include": ["src/**/*.ts", "index.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
 }

@@ -3,11 +3,11 @@ import 'reflect-metadata';
 import express, { RequestHandler } from 'express';
 import { urlencoded, json } from 'body-parser'
 
-import { SERVER_PORT } from './src/constants'
-import { Server } from './src/server';
+import { SERVER_PORT } from './constants'
+import { Server } from './server';
 
-import { User } from './src/modules/user/user.entity';
-import { Group } from './src/modules/group/group.entity';
+import { User } from './modules/user/user.entity';
+import { Group } from './modules/group/group.entity';
 
 const app = express();
 const server = new Server(app, SERVER_PORT);

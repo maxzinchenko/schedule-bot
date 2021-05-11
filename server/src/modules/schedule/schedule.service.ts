@@ -1,6 +1,6 @@
-import { BadRequestError, NotFoundError } from 'routing-controllers';
+import { NotFoundError } from 'routing-controllers';
 
-import { GROUP_NOT_FOUND, REQUEST_TYPE, USER_HAS_NO_GROUP, USER_NOT_REGISTERED } from '../../constants';
+import { GROUP_NOT_FOUND, REQUEST_TYPE, USER_NOT_FOUND } from '../../constants';
 import { request, parseSchedule, toWin1251UrlEncoded, getCache, setCache } from '../../utils';
 import { UserService } from '../user/user.service';
 import { GroupService } from '../group/group.service';
@@ -19,8 +19,7 @@ export class ScheduleService {
     }
 
     const user = await this.userService.get(query.chatId);
-    if (!user) throw new BadRequestError(USER_NOT_REGISTERED);
-    if (!user.group) throw new BadRequestError(USER_HAS_NO_GROUP);
+    if (!user?.group) throw new NotFoundError(USER_NOT_FOUND);
 
     const schedule = await this.getSchedule(user.group.name, query.startDate, query.endDate, true);
 
@@ -44,6 +43,7 @@ export class ScheduleService {
 
     const parsedData = parseSchedule(data);
 
+    // using callback here for event loop blocking avoidance
     setCache(cacheKey, parsedData, () => {});
 
     return parsedData;

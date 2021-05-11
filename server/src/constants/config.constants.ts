@@ -1,4 +1,4 @@
-export const SERVER_PORT = parseInt(process.env.API_PORT!);
+export const SERVER_PORT = parseInt(process.env.SERVER_PORT!);
 
 export const ENV = process.env.NODE_ENV;
 export const PRODUCTION = ENV === 'production';

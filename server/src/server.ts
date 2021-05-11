@@ -1,10 +1,12 @@
 import { Application, RequestHandler } from 'express';
+import http from 'http';
 import { Connection, EntitySchema } from 'typeorm';
 import { useExpressServer } from 'routing-controllers';
-import http from 'http';
 
 import { PRODUCTION } from './constants';
 import { database } from './config/database.config';
+
+const EXT = PRODUCTION ? 'js' : 'ts';
 
 export class Server {
   constructor(private readonly app: Application, private readonly port?: number) {
@@ -27,11 +29,11 @@ export class Server {
   public loadControllers(): void {
     useExpressServer(this.app, {
       routePrefix: '/api/v1',
-      controllers: [`${__dirname}/**/*.controller.${ PRODUCTION ? 'js' : 'ts' }`]
+      controllers: [`${__dirname}/**/*.controller.${ EXT }`]
     });
   };
 
-  public initDatabase(entities: Function[] | EntitySchema<any>[]): Promise<Connection> {
+  public initDatabase(entities: Function[] | EntitySchema[]): Promise<Connection> {
     return database.createConnection(entities)
   }
 }

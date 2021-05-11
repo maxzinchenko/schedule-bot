@@ -1,15 +1,15 @@
 FROM node:14 as base
 
-ENV ROOT /api
+ENV CLIENT_ROOT /client
 
-RUN mkdir $ROOT
-WORKDIR $ROOT
+RUN mkdir $CLIENT_ROOT
+WORKDIR $CLIENT_ROOT
 
 COPY ./package.json ./
 
 RUN yarn
 
-COPY . $ROOT
+COPY . $CLIENT_ROOT
 
 FROM base as production
 
