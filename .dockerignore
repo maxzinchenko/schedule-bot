@@ -6,10 +6,6 @@
 /server/dist
 /client/dist
 
-# Docker volumes
-/server/volumes
-/client/volumes
-
 # Testing
 /server/coverage
 /client/coverage

@@ -25,10 +25,12 @@ export class Client {
   }
 
   public initListeners() {
+    this.botService.addGroupListener();
+    this.botService.addClearListener();
+    this.botService.addTodayListener();
+    this.botService.addTomorrowListener();
+    this.botService.addWeekListener();
     this.botService.addPermissionsListener();
-    this.botService.addRegisterListener();
-    this.botService.addUnregisterListener();
-    this.botService.addUpdateListener();
     this.botService.addMessageListener();
 
     console.log(`\nListeners have been added\n`);

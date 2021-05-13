@@ -1,3 +1,5 @@
+import FormData from 'form-data';
+
 import { API_URL, API_USER_AGENT, REQUEST_DATA, REQUEST_N } from '../constants';
 import { axios } from '../config/axios.config';
 

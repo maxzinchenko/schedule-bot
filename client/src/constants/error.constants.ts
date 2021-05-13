@@ -5,7 +5,6 @@ export enum ApiErrorStatus {
   groupNotFound = 'GROUP_NOT_FOUND',
   groupInvalid = 'GROUP_INVALID',
   userNotFound = 'USER_NOT_FOUND',
-  userInvalid = 'USER_INVALID',
   forbidden = 'FORBIDDEN',
   serverError = 'SERVER_ERROR'
 }
@@ -28,19 +27,15 @@ export const apiErrors: ApiErrors = {
   },
   [ApiErrorStatus.groupNotFound]: {
     main: 'Групу <b>_</b> не знайдено.',
-    sub: 'Щоб cпробувати ще введіть: /register.'
-  },
-  [ApiErrorStatus.userInvalid]: {
-    main: 'Ви вже зареєстровані.',
-    sub: null
+    sub: 'Щоб cпробувати ще введіть: /group.'
   },
   [ApiErrorStatus.userNotFound]: {
-    main: 'Ви ще не зареєстровані.',
-    sub: 'Щоб зареєструватися введіть: /register.'
+    main: 'Ви ще додали групу.',
+    sub: 'Щоб додати групу введіть: /group.'
   },
   [ApiErrorStatus.forbidden]: {
     main: 'Відмовлено у доступі.',
-    sub: `Щоб отримати доступ зверніться до @${ OWNER_USERNAME }.\nВаш унікальний код: <b>_</b>.`
+    sub: `Щоб отримати доступ зверніться до @${ OWNER_USERNAME }.\n\nВаш унікальний код: <b>_</b>.`
   },
   [ApiErrorStatus.serverError]: {
     main: 'Сталася помилка. Будь ласка, спробуйте ще.',

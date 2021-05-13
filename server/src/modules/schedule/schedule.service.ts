@@ -40,12 +40,11 @@ export class ScheduleService {
     }
 
     const data = await request(REQUEST_TYPE.schedule, { group: toWin1251UrlEncoded(groupName), sdate, edate });
-
     const parsedData = parseSchedule(data);
 
     // using callback here for event loop blocking avoidance
     setCache(cacheKey, parsedData, () => {});
 
-    return parsedData;
+    return Object.keys(parsedData).length ? parsedData : null;
   }
 }

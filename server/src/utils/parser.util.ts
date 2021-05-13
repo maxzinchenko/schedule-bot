@@ -1,12 +1,12 @@
 import cheerio from 'cheerio';
 
-import { SCHEDULE_TIME_TABLE } from '../constants';
+import { API_URL, SCHEDULE_TIME_TABLE } from '../constants';
 
 const teacherRegex = new RegExp(/((старший|[`ЄІЇА-яєії]*\.)\s[`ЄІЇА-яєії]*|[`ЄІЇА-яєії]*)\s[`ЄІЇА-яєії]*\s(?:[`ЄІЇА-Я].){2}/g);
 const audienceRegex = new RegExp(/ (а\.\d*[A-zЄІЇА-яєії]*-[ЄІЇА-яєії]*\s\d*|а\.\d*[A-zЄІЇА-яєії]*-[ЄІЇА-яєії]*)/g);
 
 const getData = (string: string, idx: number) => {
-  if (!string) return { message: `Немає ${ idx + 1 }-ої пари` };
+  if (!string) return null;
 
   const [data, audience, group] = string.split(audienceRegex);
 
@@ -20,6 +20,9 @@ export const parseSchedule = (data: string) => {
   const $ = cheerio.load(data);
   const schedule = {};
 
+  const link = $('div.container').children('h4').first().children('a').attr('href');
+  const check = link ? `${ API_URL }${ link.replace(/(.|)\/timetable.cgi/, '') }` : null;
+
   $('table.table-striped').each((_, table) => {
     const date = $(table.parentNode).children('h4').text().replace(/\s.*/, '');
 
@@ -32,5 +35,5 @@ export const parseSchedule = (data: string) => {
     });
   });
 
-  return schedule;
+  return { schedule, check };
 };

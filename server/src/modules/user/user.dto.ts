@@ -1,3 +1,4 @@
+import { Group } from '../group/group.entity';
 import { EUserType } from './user.typedef';
 
 export interface ICreateUserDTO {
@@ -6,6 +7,11 @@ export interface ICreateUserDTO {
   group?: string;
   firstName?: string;
   username?: string;
+}
+
+export interface IReturnCreateUserDTO {
+  updated?: boolean;
+  group: Group
 }
 
 export interface IUpdateUserDTO {

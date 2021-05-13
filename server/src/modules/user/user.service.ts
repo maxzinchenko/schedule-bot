@@ -7,6 +7,7 @@ import { GroupService } from '../group/group.service';
 import { User } from './user.entity';
 import { ICreateUserDTO, IUpdateUserDTO } from './user.dto';
 import { FindOneOptions } from 'typeorm/find-options/FindOneOptions';
+import { Group } from '../group/group.entity';
 
 export class UserService {
   private userRepository = getRepository(User);
@@ -16,7 +17,7 @@ export class UserService {
     return this.getByChatId(chatId);
   }
 
-  public async create(dto: ICreateUserDTO): Promise<User> {
+  public async create(dto: ICreateUserDTO): Promise<Group> {
     const [group, user] = await Promise.all([this.groupService.getOneByName(dto.group), this.getByChatId(dto.chatId, { withDeleted: true })]);
     // removing if it's soft deleted
     if (user?.deletedAt) await user.remove();
@@ -35,10 +36,10 @@ export class UserService {
 
     await instance.save();
 
-    return instance;
+    return group;
   }
 
-  public async update(chatId: string, dto: IUpdateUserDTO): Promise<User> {
+  public async update(chatId: string, dto: IUpdateUserDTO): Promise<Group> {
     if (!dto.group) throw new BadRequestError(GROUP_INVALID);
 
     const [group, user] = await Promise.all([this.groupService.getOneByName(dto.group), this.getByChatId(chatId)]);
@@ -54,7 +55,7 @@ export class UserService {
 
     await user.save();
 
-    return user;
+    return group;
   }
 
   public async remove(id: string): Promise<User> {
