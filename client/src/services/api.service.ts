@@ -53,10 +53,7 @@ export class ApiService {
 
   private getErrorMessage(error: AxiosError): ApiErrorMessage {
     if (error.code === ECONNREFUSED) return apiErrors[ApiErrorStatus.serverNotReady];
-    if (error.response?.data?.message && Object.keys(apiErrors).includes(error.response.data.message)) {
-      return apiErrors[error.response.data.message];
-    }
 
-    return apiErrors[ApiErrorStatus.serverError];
+    return apiErrors[error.response?.data?.message] || apiErrors[ApiErrorStatus.serverError];
   }
 }

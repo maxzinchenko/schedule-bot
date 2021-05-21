@@ -2,9 +2,7 @@ export class ScheduleService {
   public convertSchedule(data: any) {
     const days = Object.keys(data);
 
-    const convertedData = `${ days.map(key => this.convertDay(key, data[key])) }`;
-
-    return convertedData.split(',').join('');
+    return days.map(key => this.convertDay(key, data[key]));
   }
 
   public period(period: string) {
@@ -42,7 +40,7 @@ export class ScheduleService {
   private convertSubject(subject: any, idx: number) {
     return `
 <i>Пара: <b>${ idx + 1 }</b></i>
-${ !subject ? '<b>Немає \u{1F389}</b>' : `<b>Предмет:</b> ${ subject.subject }
+${ !subject ? '<b>Немає</b>' : `<b>Предмет:</b> ${ subject.subject }
 <b>Викладач:</b> ${ subject.teacher }
 <b>Аудиторiя:</b> ${ subject.audience }
 <b>Збірна група:</b> ${ subject.group || 'Нi' }

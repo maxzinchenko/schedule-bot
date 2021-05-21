@@ -25,13 +25,12 @@ export class BotService extends TelegramBot {
     this.onText(permissionsRegex, async parent => {
       if (parent.from.is_bot) return;
 
-      await this.sendMessage(parent.chat.id, 'З якою метою ви хочете отримати доступ до команд модератора?');
+      await this.sendMessage(parent.chat.id, 'З якою метою Ви хочете отримати доступ до недоступних команд?');
 
       this.onText(answerRegex, async data => {
         if (data.from.id === parent.from.id) {
           await this.sendMessage(parent.chat.id, 'З Вами скоро зв\'яжуться.\n\n<b>Дякуємо, що ви з нами!</b>', { parse_mode: 'HTML' });
           await this.sendHeart(data.chat.id);
-
           await this.sendMessage(OWNER_ID, JSON.stringify(data, null, 4));
         }
       });
@@ -78,8 +77,6 @@ export class BotService extends TelegramBot {
     //
     //     // if (from?.id === OWNER_ID) return this.sendException(chat.id, apiErrors[ApiErrorStatus.FORBIDDEN], chat.id);
     //
-    //     console.log('ADSA', res);
-    //
     //     await this.sendMessage(chat.id, JSON.stringify({ chat, from, text }, null, 4));
     //   });
     // });
@@ -106,7 +103,7 @@ export class BotService extends TelegramBot {
   // PRIVATE
 
   private sendException(chatId: number, error: ApiErrorMessage | string, replaceValue?: number | string) {
-    const msg = `<b>Помилка:</b> ${ typeof error === 'string' ? error : `${ error.main }\n\n${ error.sub || '' }` }`;
+    const msg = `<b>${ typeof error === 'string' ? error : `${ error.main }</b>\n\n${ error.sub || '' }` }`;
     const msgReplaced = replaceValue ? msg.replace(/_/, replaceValue.toString()) : msg;
 
     return this.sendMessage(chatId, msgReplaced, { parse_mode: 'HTML' });
@@ -139,19 +136,21 @@ export class BotService extends TelegramBot {
   }
 
   private async getSchedule(chatId: number, period: 'today' | 'tomorrow' | 'week') {
-    let message;
-
     try {
       const dates = this.scheduleService.period(period);
       const res = await request.getSchedule({ chatId, ...dates });
 
       if (!Object.keys(res.data.schedule).length) {
-        message = '<b>Запланованих пар не знайдено!</b>';
+        await this.sendMessage(chatId, '<b>Запланованих пар не знайдено!</b>', { parse_mode: 'HTML' });
       } else {
-        message = this.scheduleService.convertSchedule(res.data.schedule);
+        const days = await this.scheduleService.convertSchedule(res.data.schedule);
+
+        await days.forEach(day => {
+          this.sendMessage(chatId, day.split(',').join(''), { parse_mode: 'HTML' });
+        });
       }
 
-      await this.sendMessage(chatId, `${ message }\n\n<a href="${ res.data.check }">Перевірити розклад</a>`, { parse_mode: 'HTML' });
+      await this.sendMessage(chatId, `<a href="${ res.data.check }">Перевірити розклад</a>`, { parse_mode: 'HTML' });
     } catch (error) {
       await this.sendException(chatId, apiErrors[error.response?.data?.message] || apiErrors.SERVER_ERROR);
     }

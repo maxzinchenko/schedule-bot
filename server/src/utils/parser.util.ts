@@ -24,7 +24,7 @@ export const parseSchedule = (data: string) => {
   const check = link ? `${ API_URL }${ link.replace(/(.|)\/timetable.cgi/, '') }` : null;
 
   $('table.table-striped').each((_, table) => {
-    const date = $(table.parentNode).children('h4').text().replace(/\s.*/, '');
+    const date = $(table.parentNode).children('h4').text();
 
     schedule[date] = [];
 
