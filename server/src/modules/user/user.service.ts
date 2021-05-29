@@ -13,25 +13,29 @@ export class UserService {
   private userRepository = getRepository(User);
   private groupService = new GroupService();
 
-  public get(chatId: string): Promise<User | null> {
-    return this.getByChatId(chatId);
+  public async get(chatId: string): Promise<User> {
+    const user = await this.getByChatId(chatId);
+    if (!user) throw new NotFoundError(USER_NOT_FOUND);
+
+    return user;
   }
 
   public async create(dto: ICreateUserDTO): Promise<Group> {
-    const [group, user] = await Promise.all([this.groupService.getOneByName(dto.group), this.getByChatId(dto.chatId, { withDeleted: true })]);
+    const [group, user] = await Promise.all([this.groupService.getOneByName(dto.group), this.getByChatId(dto.chatId.toString(), { withDeleted: true })]);
     // removing if it's soft deleted
     if (user?.deletedAt) await user.remove();
     if (user && !user.deletedAt) throw new BadRequestError(USER_INVALID);
     if (dto.group && !group) throw new NotFoundError(GROUP_NOT_FOUND);
 
     const instance = new User();
-    instance.chatId = dto.chatId;
+    instance.chatId = dto.chatId.toString();
     instance.group = group || null;
     instance.firstName = dto.firstName;
     instance.username = dto.username;
     instance.type = dto.type;
 
     const errors = await validate(instance);
+    console.log(errors);
     if (errors.length) throw new BadRequestError(errors[0].property);
 
     await instance.save();
@@ -58,9 +62,7 @@ export class UserService {
     return group;
   }
 
-  public async remove(id: string): Promise<User> {
-    const chatId = parseInt(id);
-
+  public async remove(chatId: string): Promise<User> {
     // using userRepository instead of getByChatId because this call
     // no need to have included models inside user
     const user = await this.userRepository.findOne({ chatId });
@@ -73,9 +75,7 @@ export class UserService {
 
   // PRIVATE
 
-  private getByChatId(id: string | number, options?: FindOneOptions<User>): Promise<User> {
-    const chatId = typeof id === 'string' ? parseInt(id) : id;
-
+  private async getByChatId(chatId: string, options?: FindOneOptions<User>): Promise<User> {
     return this.userRepository.findOne({ chatId }, { ...options, relations: ['group'] });
   }
 }

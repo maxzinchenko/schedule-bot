@@ -30,7 +30,7 @@ export const apiErrors: ApiErrors = {
     sub: 'Щоб cпробувати ще введіть: /group.'
   },
   [ApiErrorStatus.userNotFound]: {
-    main: 'Ви ще додали групу.',
+    main: 'Ви ще не додали групу.',
     sub: 'Щоб додати групу введіть: /group.'
   },
   [ApiErrorStatus.forbidden]: {

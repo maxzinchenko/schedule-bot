@@ -9,11 +9,11 @@ export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
   @Index({ unique: true })
   @Column()
-  chatId: number;
+  chatId: string;
 
   @IsString()
   @Index({ unique: true })

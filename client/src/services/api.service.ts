@@ -12,8 +12,8 @@ export class ApiService {
 
   public async getUser(id: number, callback): Promise<void> {
     try {
-      const res = await request.getUser(id);
-      callback(null, res.data);
+      // const res = await request.getUser(id);
+      // callback(null, res.data);
     } catch (error) {
       console.log(error);
       callback(this.getErrorMessage(error));

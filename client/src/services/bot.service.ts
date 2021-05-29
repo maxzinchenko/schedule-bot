@@ -41,16 +41,23 @@ export class BotService extends TelegramBot {
     this.onText(groupRegex, async parent => {
       if (parent.from.is_bot) return;
       this.removeTextListener(answerRegex);
+      let oldGroup;
 
-      const { data } = await request.getUser(parent.chat.id);
+      try {
+        const { data } = await request.getUser(parent.chat.id);
+        oldGroup = data.group;
+      } catch {}
+
       await this.sendMessage(parent.chat.id, 'Введіть назву групи\n<b>(регістр не має значення)</b>', { parse_mode: 'HTML' });
 
       this.onText(answerRegex, async ({ chat, from, text }) => {
         if (from.id === parent.from.id) {
           const group = text.trim();
 
-          if (!data || !data.group) await this.addGroup(chat.id, from.username, from.first_name, group, chat.type);
-          else await this.updateGroup(chat.id, from.username, from.first_name, group, data.group.realName);
+          if (oldGroup) await this.updateGroup(chat.id, from.username, from.first_name, group, oldGroup.realName);
+          else await this.addGroup(chat.id, from.username, from.first_name, group, chat.type);
+
+          this.removeTextListener(answerRegex);
         }
       });
     });
@@ -162,6 +169,7 @@ export class BotService extends TelegramBot {
         keyboard: [
           [{ text: '/today' }, { text: '/tomorrow' }, { text: '/week' }]
         ],
+        force_reply: false,
         one_time_keyboard: true,
         resize_keyboard: true,
       }
