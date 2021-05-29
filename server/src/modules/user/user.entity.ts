@@ -16,7 +16,7 @@ export class User extends BaseEntity {
   chatId: string;
 
   @IsString()
-  @Index({ unique: true })
+  @Index()
   @Column({ nullable: true })
   username?: string;
 

@@ -4,6 +4,8 @@ export enum ApiErrorStatus {
   serverNotReady = 'SERVER_NOT_READY',
   groupNotFound = 'GROUP_NOT_FOUND',
   groupInvalid = 'GROUP_INVALID',
+  groupTypeInvalid = 'GROUP_TYPE_INVALID',
+  groupAlreadyAdded = 'GROUP_ALREADY_ADDED',
   userNotFound = 'USER_NOT_FOUND',
   forbidden = 'FORBIDDEN',
   serverError = 'SERVER_ERROR'
@@ -25,9 +27,21 @@ export const apiErrors: ApiErrors = {
     main: 'Не валідна назва групи.',
     sub: null
   },
+  [ApiErrorStatus.groupTypeInvalid]: {
+    main: 'У вас SUPERGROUP група.',
+    sub: 'Потрібні права адміністратора щоб бот працював у такій групі або змініть тип групи.'
+  },
+  [ApiErrorStatus.groupAlreadyAdded]: {
+    main: 'Ви вже додали цю групу.',
+    sub: 'Щоб оновити групу введіть: /group.'
+  },
   [ApiErrorStatus.groupNotFound]: {
     main: 'Групу <b>_</b> не знайдено.',
     sub: 'Щоб cпробувати ще введіть: /group.'
+  },
+  [ApiErrorStatus.userNotFound]: {
+    main: 'Ви ще не додали групу.',
+    sub: 'Щоб додати групу введіть: /group.'
   },
   [ApiErrorStatus.userNotFound]: {
     main: 'Ви ще не додали групу.',

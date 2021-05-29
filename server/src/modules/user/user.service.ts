@@ -35,7 +35,6 @@ export class UserService {
     instance.type = dto.type;
 
     const errors = await validate(instance);
-    console.log(errors);
     if (errors.length) throw new BadRequestError(errors[0].property);
 
     await instance.save();

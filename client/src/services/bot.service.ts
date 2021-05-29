@@ -1,16 +1,16 @@
-import TelegramBot, { ConstructorOptions } from 'node-telegram-bot-api';
+import TelegramBot, { ConstructorOptions, Message } from 'node-telegram-bot-api';
 
-import { apiErrors, ApiErrorMessage, OWNER_ID } from '../constants';
+import { apiErrors, ApiErrorMessage, OWNER_ID, BOT_USERNAME, BOT_ID } from '../constants';
 import { request } from '../config';
 import { ApiService } from './api.service';
 import { ScheduleService } from './scedule.service';
 
-const groupRegex = new RegExp(/^\/group$/ig);
-const clearRegex = new RegExp(/^\/clear$/ig);
-const permissionsRegex = new RegExp(/^\/permissions$/ig);
-const todayRegex = new RegExp(/^\/today$/ig);
-const tomorrowRegex = new RegExp(/^\/tomorrow$/ig);
-const weekRegex = new RegExp(/^\/week$/ig);
+const groupRegex = new RegExp(`^\/(group$|group@${ BOT_USERNAME })`, 'ig');
+const clearRegex = new RegExp(`^\/(clear$|clear@${ BOT_USERNAME })`, 'ig');
+const permissionsRegex = new RegExp(`^\/(permissions$|permissions@${ BOT_USERNAME })`, 'ig');
+const todayRegex = new RegExp(`^\/(today$|today@${ BOT_USERNAME })`, 'ig');
+const tomorrowRegex = new RegExp(`^\/(tomorrow$|tomorrow@${ BOT_USERNAME })`, 'ig');
+const weekRegex = new RegExp(`^\/(week$|week@${ BOT_USERNAME })`, 'ig');
 const answerRegex = new RegExp(/^(?!\/.*$).*/g);
 
 export class BotService extends TelegramBot {
@@ -23,57 +23,59 @@ export class BotService extends TelegramBot {
 
   public addPermissionsListener() {
     this.onText(permissionsRegex, async parent => {
-      if (parent.from.is_bot) return;
+      await this.checkMessage(parent, async () => {
+        await this.sendMessage(parent.chat.id, 'З якою метою Ви хочете отримати доступ до недоступних команд?');
 
-      await this.sendMessage(parent.chat.id, 'З якою метою Ви хочете отримати доступ до недоступних команд?');
-
-      this.onText(answerRegex, async data => {
-        if (data.from.id === parent.from.id) {
-          await this.sendMessage(parent.chat.id, 'З Вами скоро зв\'яжуться.\n\n<b>Дякуємо, що ви з нами!</b>', { parse_mode: 'HTML' });
-          await this.sendHeart(data.chat.id);
-          await this.sendMessage(OWNER_ID, JSON.stringify(data, null, 4));
-        }
+        this.onText(answerRegex, async data => {
+          if (data.from.id === parent.from.id) {
+            await this.sendMessage(parent.chat.id, 'З Вами скоро зв\'яжуться.\n\n<b>Дякуємо, що ви з нами!</b>', { parse_mode: 'HTML' });
+            await this.sendHeart(data.chat.id);
+            await this.sendMessage(OWNER_ID, JSON.stringify(data, null, 4));
+          }
+        });
       });
     });
   }
 
   public addGroupListener() {
     this.onText(groupRegex, async parent => {
-      if (parent.from.is_bot) return;
-      this.removeTextListener(answerRegex);
-      let oldGroup;
+      await this.checkMessage(parent, async () => {
+        let oldGroup;
 
-      try {
-        const { data } = await request.getUser(parent.chat.id);
-        oldGroup = data.group;
-      } catch {}
+        try {
+          const { data } = await request.getUser(parent.chat.id);
+          oldGroup = data.group;
+        } catch {}
 
-      await this.sendMessage(parent.chat.id, 'Введіть назву групи\n<b>(регістр не має значення)</b>', { parse_mode: 'HTML' });
+        await this.sendMessage(parent.chat.id, 'Введіть назву групи\n<b>(регістр не має значення)</b>', { parse_mode: 'HTML' });
 
-      this.onText(answerRegex, async ({ chat, from, text }) => {
-        if (from.id === parent.from.id) {
-          const group = text.trim();
+        this.onText(answerRegex, async ({ chat, from, text }) => {
+          if (from.id === parent.from.id) {
+            const group = text.trim().toLowerCase();
 
-          if (oldGroup) await this.updateGroup(chat.id, from.username, from.first_name, group, oldGroup.realName);
-          else await this.addGroup(chat.id, from.username, from.first_name, group, chat.type);
+            if (oldGroup) await this.updateGroup(chat.id, from.username, from.first_name, group, oldGroup.realName);
+            else await this.addGroup(chat.id, from.username, from.first_name, group, chat.type);
 
-          this.removeTextListener(answerRegex);
-        }
+            this.removeTextListener(answerRegex);
+          }
+        });
       });
     });
   }
 
   public addClearListener() {
-    this.onText(clearRegex, async ({ chat, from }) => {
-      if (from.is_bot) return;
+    this.onText(clearRegex, async msg => {
+      await this.checkMessage(msg, async () => {
+        const { id } = msg.chat;
 
-      try {
-        await request.removeUser(chat.id);
-        await this.sendMessage(chat.id, 'Групу успішно видалено.\n\n<b>Дякуємо, що були з нами!</b>', { parse_mode: 'HTML' });
-        this.sendHeart(chat.id);
-      } catch (error) {
-        await this.sendException(chat.id, apiErrors[error.response?.data?.message] || apiErrors.SERVER_ERROR);
-      }
+        try {
+          await request.removeUser(id);
+          await this.sendMessage(id, 'Групу успішно видалено.\n\n<b>Дякуємо, що були з нами!</b>', { parse_mode: 'HTML' });
+          this.sendHeart(id);
+        } catch (error) {
+          await this.sendException(id, apiErrors[error.response?.data?.message] || apiErrors.SERVER_ERROR);
+        }
+      });
     });
   }
 
@@ -90,20 +92,26 @@ export class BotService extends TelegramBot {
   }
 
   public addTodayListener() {
-    this.onText(todayRegex, async ({ chat }) => {
-      await this.getSchedule(chat.id, 'today');
+    this.onText(todayRegex, async msg => {
+      await this.checkMessage(msg, async () => {
+        await this.getSchedule(msg.chat.id, 'today');
+      });
     });
   }
 
   public addTomorrowListener() {
-    this.onText(tomorrowRegex, async ({ chat }) => {
-      await this.getSchedule(chat.id, 'tomorrow');
+    this.onText(tomorrowRegex, async msg => {
+      await this.checkMessage(msg, async () => {
+        await this.getSchedule(msg.chat.id, 'tomorrow');
+      });
     });
   }
 
   public addWeekListener() {
-    this.onText(weekRegex, async ({ chat }) => {
-      await this.getSchedule(chat.id, 'week');
+    this.onText(weekRegex, async msg => {
+      await this.checkMessage(msg, async () => {
+        await this.getSchedule(msg.chat.id, 'week');
+      });
     });
   }
 
@@ -113,7 +121,25 @@ export class BotService extends TelegramBot {
     const msg = `<b>${ typeof error === 'string' ? error : `${ error.main }</b>\n\n${ error.sub || '' }` }`;
     const msgReplaced = replaceValue ? msg.replace(/_/, replaceValue.toString()) : msg;
 
-    return this.sendMessage(chatId, msgReplaced, { parse_mode: 'HTML' });
+    this.sendMessage(chatId, msgReplaced, { parse_mode: 'HTML' });
+  }
+
+  private async checkMessage({ from, chat }: Message, cb: () => void) {
+    this.removeAllListeners();
+
+    if (from.is_bot) {
+      this.sendException(chat.id, apiErrors.FORBIDDEN);
+      return;
+    }
+
+    const botData =  await this.getChatMember(chat.id, BOT_ID);
+
+    if (chat.type === 'supergroup' && botData.status !== 'administrator') {
+      this.sendException(chat.id, apiErrors.GROUP_TYPE_INVALID);
+      return;
+    }
+
+    cb();
   }
 
   private sendHeart(chatId: number) {
@@ -134,6 +160,11 @@ export class BotService extends TelegramBot {
 
   private async updateGroup(chatId: number, username: string, firstName: string, group: string, prevGroup: string) {
     try {
+      if (group.toLowerCase() === prevGroup.toLowerCase()) {
+        await this.sendException(chatId, apiErrors.GROUP_ALREADY_ADDED);
+        return;
+      }
+
       const res = await request.updateUser(chatId, { username, firstName, group });
       await this.sendMessage(chatId, `Групу <b>${ prevGroup }</b> успішно оновлено на <b>${ res.data.realName }</b>.`, { parse_mode: 'HTML' });
       await this.sendKeyboard(chatId);
@@ -157,7 +188,9 @@ export class BotService extends TelegramBot {
         });
       }
 
-      await this.sendMessage(chatId, `<a href="${ res.data.check }">Перевірити розклад</a>`, { parse_mode: 'HTML' });
+      await setTimeout(async () => {
+        await this.sendMessage(chatId, `<a href="${ res.data.check }">Перевірити розклад</a>`, { parse_mode: 'HTML' });
+      }, 1000);
     } catch (error) {
       await this.sendException(chatId, apiErrors[error.response?.data?.message] || apiErrors.SERVER_ERROR);
     }
