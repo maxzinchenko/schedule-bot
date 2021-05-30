@@ -212,11 +212,11 @@ export class BotService extends TelegramBot {
         await days.forEach(day => {
           this.sendMessage(chatId, day.split(',').join(''), { parse_mode: 'HTML' });
         });
-      }
 
-      await setTimeout(async () => {
-        await this.sendMessage(chatId, `<a href="${ res.data.check }">Перевірити розклад</a>`, { parse_mode: 'HTML' });
-      }, 1000);
+        await setTimeout(async () => {
+          await this.sendMessage(chatId, `<a href="${ res.data.check }">Перевірити розклад</a>`, { parse_mode: 'HTML' });
+        }, 1000);
+      }
     } catch (error) {
       await this.sendException(chatId, apiErrors[error.response?.data?.message] || apiErrors.SERVER_ERROR);
     }
