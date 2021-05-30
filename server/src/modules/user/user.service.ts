@@ -20,7 +20,14 @@ export class UserService {
     return user;
   }
 
+  public async getAll(): Promise<any> {
+    const [users, total] = await this.userRepository.findAndCount({ withDeleted: true, relations: ['group'] });
+
+    return { total, users };
+  }
+
   public async create(dto: ICreateUserDTO): Promise<Group> {
+
     const [group, user] = await Promise.all([this.groupService.getOneByName(dto.group), this.getByChatId(dto.chatId.toString(), { withDeleted: true })]);
     // removing if it's soft deleted
     if (user?.deletedAt) await user.remove();
@@ -30,6 +37,7 @@ export class UserService {
     const instance = new User();
     instance.chatId = dto.chatId.toString();
     instance.group = group || null;
+    instance.title = dto.title;
     instance.firstName = dto.firstName;
     instance.username = dto.username;
     instance.type = dto.type;
@@ -52,6 +60,7 @@ export class UserService {
     user.group = group;
     user.firstName = dto.firstName || user.firstName;
     user.username = dto.username || user.username;
+    user.title = dto.title || user.title;
 
     const errors = await validate(user);
     if (errors.length) throw new BadRequestError(errors[0].property);

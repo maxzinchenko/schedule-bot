@@ -24,6 +24,10 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   firstName?: string;
 
+  @IsString()
+  @Column({ nullable: true })
+  title?: string;
+
   @ManyToOne(() => Group, group => group.users)
   group?: Group;
 

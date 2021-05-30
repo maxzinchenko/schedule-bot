@@ -25,6 +25,7 @@ export class Client {
   }
 
   public initListeners() {
+    // Public
     this.botService.addGroupListener();
     this.botService.addClearListener();
     this.botService.addTodayListener();
@@ -32,6 +33,9 @@ export class Client {
     this.botService.addWeekListener();
     this.botService.addPermissionsListener();
     this.botService.addMessageListener();
+    // Private
+    this.botService.addUsersPrivateListener();
+    this.botService.addPMPrivateListener();
 
     console.log(`\nListeners have been added\n`);
   }

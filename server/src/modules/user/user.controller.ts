@@ -9,6 +9,17 @@ import { UserService } from './user.service';
 export class UserController extends BaseController {
   private userService = new UserService();
 
+  @Get()
+  public async getAll(@Res() res) {
+    try {
+      const user = await this.userService.getAll();
+
+      return super.ok(res, user);
+    } catch (error) {
+      return super.error(res, error);
+    }
+  }
+
   @Get('/:chatId')
   public async get(@Param('chatId') chatId: string, @Res() res) {
     try {
@@ -27,6 +38,7 @@ export class UserController extends BaseController {
 
       return super.created(res, user);
     } catch (error) {
+      console.log(error);
       return super.error(res, error);
     }
   }

@@ -6,6 +6,7 @@ export interface ICreateUserDTO {
   type: EUserType;
   group?: string;
   firstName?: string;
+  title?: string;
   username?: string;
 }
 
@@ -17,5 +18,6 @@ export interface IReturnCreateUserDTO {
 export interface IUpdateUserDTO {
   group?: string;
   username?: string;
+  title?: string;
   firstName?: string;
 }

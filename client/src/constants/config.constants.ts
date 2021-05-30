@@ -7,4 +7,8 @@ export const BOT_USERNAME = process.env.BOT_USERNAME;
 export const OWNER_ID = parseInt(process.env.OWNER_ID!);
 export const OWNER_USERNAME = process.env.OWNER_USERNAME;
 
+export const ADMIN_ID = parseInt(process.env.ADMIN_ID!);
+
 export const SERVER_URL = process.env.SERVER_URL;
+
+export const ADMIN_IDS = [OWNER_ID, ADMIN_ID];
